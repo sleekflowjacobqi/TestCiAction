@@ -38,7 +38,7 @@ jobs:
           headerPattern: '^(\w*)(?:\(([\w$.\-*/ ]*)\))?: (.*)$'
 
       - uses: marocchino/sticky-pull-request-comment@v2
-        if: always() && (steps.lint_pr_title.outputs.error_message != null)
+        if: github.base_ref != 'master' && github.base_ref != 'staging' && github.base_ref != 'release'
         with:
           header: pr-title-lint-error
           message: |
