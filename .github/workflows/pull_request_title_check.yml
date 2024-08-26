@@ -12,22 +12,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Validate PR Title
-        uses: actions/github-script@v6
+        uses: amannn/action-semantic-pull-request@v4.4.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          script: |
-            const prTitle = context.payload.pull_request.title;
-            const regex = /^(fix|feat|chore|docs|style|refactor|perf|test)\((DEVS|INT)-\d+\): .+$/;
-            if (!regex.test(prTitle)) {
-              const { GITHUB_TOKEN } = process.env;
-              const octokit = github.getOctokit(GITHUB_TOKEN);
-              const { owner, repo, number } = context.issue;
-              const message = `Invalid PR title: "${prTitle}". Expected format: "type(DEVS-XXXX): description" or "type(INT-XXXX): description"`;
-              await octokit.pulls.createReview({
-                owner,
-                repo,
-                pull_number: number,
-                event: 'REQUEST_CHANGES',
-                body: message
-              });
-              core.setFailed(message);
-            }
+          types: fix,feat,chore,docs,style,refactor,perf,test
+          scopes: DEVS,INT
+          validateSingleCommit: false
