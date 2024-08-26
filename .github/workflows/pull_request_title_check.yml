@@ -1,7 +1,7 @@
 name: "Pull Request Title Check"
 
 on:
-  pull_request_target:
+  pull_request:
     types:
       - opened
       - edited
@@ -13,10 +13,10 @@ permissions:
     write
 
 jobs:
-  if: github.head_ref != 'master'
   main:
     name: Validate Pull Request Title
     runs-on: ubuntu-latest
+    if: github.base_ref != 'master'
     steps:
       - uses: amannn/action-semantic-pull-request@v5
         id: lint_pr_title
@@ -44,11 +44,11 @@ jobs:
           header: pr-title-lint-error
           message: |
             Hey there and thank you for opening this pull request! 👋🏼
-            
+
             We require pull request titles to follow `type(scope): description` and it looks like your proposed title needs to be adjusted.
-            
+
             Details:
-            
+
             ```
             ${{ steps.lint_pr_title.outputs.error_message }}
             ```
