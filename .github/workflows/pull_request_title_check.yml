@@ -17,6 +17,7 @@ jobs:
     name: Validate Pull Request Title
     runs-on: ubuntu-latest
     steps:
+      - run: echo ${{ github.head_ref }}
       - uses: amannn/action-semantic-pull-request@v5
         if: ${{ github.head_ref != 'master' && github.head_ref != 'staging' && github.head_ref != 'release' }}
         id:  lint_pr_title
